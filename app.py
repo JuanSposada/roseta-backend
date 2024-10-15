@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey
 from flask_marshmallow import Marshmallow
@@ -11,13 +11,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tester:test@localhost/test
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 
-
-with app.app_context():
-    try:
-        db.engine.execute("SELECT 1")
-        print("si")
-    except:
-        print('no')
+# Rutas
 
 @app.route('/api/sensors')
 def sensores():
@@ -38,6 +32,18 @@ def rosetas():
     rosetas_list = Roseta.query.all()
     result = rosetas_schema.dump(rosetas_list)
     return jsonify(result)
+
+
+@app.route("/api/rosetas/add", methods=['POST'])
+def rosetas_add():
+    if request.is_json:
+        ubicacion = request.json['ubicacion']
+        estado = request.json['estado']
+        id_usuario = request.json['id_usuario']
+        roseta = Roseta(ubicacion=ubicacion, estado=estado, id_usuario=id_usuario)
+        db.session.add(roseta)
+        db.session.commit()
+        return roseta_schema.jsonify(roseta)
 
 @app.route("/api/users/<string:id>")
 def users_id(id: str):
