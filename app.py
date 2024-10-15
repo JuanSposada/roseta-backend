@@ -1,6 +1,6 @@
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Text, BigInteger
+from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey
 from flask_marshmallow import Marshmallow
 
 
@@ -33,6 +33,12 @@ def users():
     result = usuarios_schema.dump(users_list)
     return jsonify(result)
 
+@app.route("/api/rosetas", methods=['GET'])
+def rosetas():
+    rosetas_list = Roseta.query.all()
+    result = rosetas_schema.dump(rosetas_list)
+    return jsonify(result)
+
 @app.route("/api/users/<string:id>")
 def users_id(id: str):
     return jsonify(user=id)
@@ -51,13 +57,20 @@ def not_found():
 
 # modelos de base de datos
 class Usuario(db.Model): 
-    __tablename__ = 'usuarios_test'
+    __tablename__ = 'usuarios'
 
     id_usuario = Column(BigInteger, primary_key=True)
     nombre = Column(Text, nullable=True)
     correo = Column(Text, unique=True, nullable=True)
     password = Column(Text, nullable=True )
     telefono = Column(Text, nullable=True)
+
+class Roseta(db.Model):
+    __tablename__= 'rosetas'
+    id_roseta = Column(BigInteger, primary_key=True)
+    ubicacion = Column(Text, nullable=True)
+    estado = Column(Boolean)
+    id_usuario = Column(BigInteger, ForeignKey('usuarios.id_usuario'), nullable=False)
 
 # Clase para marshmallow
 
@@ -67,6 +80,12 @@ class UsuarioSchema(ma.Schema):
 
 usuario_schema = UsuarioSchema()
 usuarios_schema = UsuarioSchema(many=True)
+
+class RosetaSchema(ma.Schema):
+    class Meta:
+        fields = ('id_roseta', 'ubicacion','estado','id_usuario')
+roseta_schema = RosetaSchema()
+rosetas_schema = RosetaSchema(many=True)
 
 
 if __name__ == '__main__':
