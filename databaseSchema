@@ -1,0 +1,56 @@
+create table usuarios (
+id_usuario bigint primary key generated always as identity,
+nombre text,
+correo text unique,
+password text,
+telefono text,
+rol text;
+);
+
+create table rosetas (
+id_roseta bigint primary key generated always as identity,
+ubicacion text,
+estado boolean,
+id_usuario bigint references usuarios (id_usuario)
+);
+
+create table dispositivos (
+id_dispositivo bigint primary key generated always as identity,
+tipo_dispositivo text,
+estado_dispositivo boolean,
+id_roseta bigint references rosetas (id_roseta)
+);
+
+create table historial_sensores (
+id_historial bigint primary key generated always as identity,
+tipo_sensor text,
+fecha_hora timestamp,
+valor text,
+id_roseta bigint references rosetas (id_roseta)
+);
+
+create table historial_camaras (
+id_evento bigint primary key generated always as identity,
+fecha_hora timestamp,
+tipo_evento text,
+url_video text,
+id_roseta bigint references rosetas (id_roseta)
+);
+
+create table configuraciones_roseta (
+id_configuracion bigint primary key generated always as identity,
+id_roseta bigint references rosetas (id_roseta),
+wifi_ssid text,
+wifi_password text,
+umbral_humo int,
+umbral_movimiento int
+);
+
+create table alertas (
+id_alerta bigint primary key generated always as identity,
+tipo_alerta text,
+mensaje text,
+fecha_hora timestamp,
+id_roseta bigint references rosetas (id_roseta)
+);
+

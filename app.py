@@ -4,7 +4,7 @@ from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey
 from flask_marshmallow import Marshmallow
 from models import db
 from schemas import ma
-from routes import rosetas_bp, usuarios_bp
+from routes import rosetas_bp, usuarios_bp, dispositivos_bp
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ ma.init_app(app)
 # Rutas
 app.register_blueprint(rosetas_bp, url_prefix='/api')
 app.register_blueprint(usuarios_bp, url_prefix='/api')
-
+app.register_blueprint(dispositivos_bp, url_prefix='/api')
 
 if __name__ == '__main__':
     app.run(debug=True)
