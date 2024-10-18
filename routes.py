@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify, request
-from models import Usuario, Roseta, Dispositivo
-from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema
+from models import Usuario, Roseta, Dispositivo, HistorialSensores
+from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema, HistorialSensoresSchema
 
 
 #Blueprint de Usuarios
@@ -31,3 +31,7 @@ dispositivos_bp = Blueprint('dispositivos', __name__)
 def dispositivos():
     return jsonify(message='Dispositivos')
 
+historial_sensores_bp = Blueprint('historial_senores',__name__)
+@historial_sensores_bp.route('/historial-sensores', methods=['GET'])
+def historial_sensores():
+    return jsonify(message='historialSensores')

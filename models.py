@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey
+from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey,TIMESTAMP
 
 
 db = SQLAlchemy()
@@ -23,7 +23,15 @@ class Roseta(db.Model):
 
 class Dispositivo(db.Model):
     __tablename__= 'dispositivos'
-    id_dispositivo = Column(BigInteger, primary_key=True)
-    tipo_dispositivo = Column(Text, nullable=True)
+    id_dispositivo = Column(BigInteger, primary_key=True, autoincrement=True)
+    tipo_dispositivo = Column(Text, nullable=False)
     estado_dispositivo= Column(Boolean)
     id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'))
+
+class HistorialSensores(db.Model):
+    __tablename__ = 'historial_sensores'
+    id_historial = Column(BigInteger, primary_key=True)
+    tipo_sensor = Column(Text, nullable=False)
+    fecha_hora = Column(TIMESTAMP, nullable=False)
+    valor = Column(Text, nullable=False)
+    id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)

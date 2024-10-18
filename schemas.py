@@ -1,5 +1,5 @@
 from flask_marshmallow import Marshmallow
-from models import Usuario, Roseta, Dispositivo
+from models import Usuario, Roseta, Dispositivo,HistorialSensores
 
 
 ma = Marshmallow()
@@ -18,4 +18,9 @@ class RosetaSchema(ma.SQLAlchemyAutoSchema):
 class DispositivoSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Dispositivo
+        load_instance = True
+
+class HistorialSensoresSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = HistorialSensores
         load_instance = True
