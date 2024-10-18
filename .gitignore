@@ -1,3 +1,11 @@
-/.venv/
-/__pycache__/
-test_dbCredentialUser
+# Entorno virtual
+.venv/
+
+# Archivos de caché de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de configuración de entornos virtuales
+.env

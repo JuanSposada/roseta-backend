@@ -20,18 +20,26 @@ def usuarios():
 #Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)
 @rosetas_bp.route('/rosetas', methods=['GET'])
-def get_rosetas():
+def rosetas():
     rosetas_list = Roseta.query.all()
     rosetas_schema = RosetaSchema(many=True)
     result = rosetas_schema.dump(rosetas_list)
     return jsonify(result)
     
+ # Dispositivos   
 dispositivos_bp = Blueprint('dispositivos', __name__)
 @dispositivos_bp.route('/dispositivos', methods=['GET'])
 def dispositivos():
-    return jsonify(message='Dispositivos')
+    dispositivos_list = Dispositivo.query.all()
+    dispositivos_schema = DispositivoSchema(many=True)
+    result = dispositivos_schema.dump(dispositivos_list)
+    return jsonify(result)
 
+# Historial Sensores
 historial_sensores_bp = Blueprint('historial_senores',__name__)
 @historial_sensores_bp.route('/historial-sensores', methods=['GET'])
 def historial_sensores():
-    return jsonify(message='historialSensores')
+    historial_list = HistorialSensores.query.all()
+    historial_schema = HistorialSensoresSchema(many=True)
+    result = historial_schema.dump(historial_list)
+    return jsonify(result)
