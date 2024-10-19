@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey,TIMESTAMP
+from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey,TIMESTAMP, Integer
 
 
 db = SQLAlchemy()
@@ -37,10 +37,18 @@ class HistorialSensores(db.Model):
     id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)
 
 class HistorialCamaras(db.Model):
-    __tablenae__ = 'historial_camaras'
+    __tablename__ = 'historial_camaras'
     id_evento = Column(BigInteger, primary_key=True)
     fecha_hora = Column(TIMESTAMP, nullable=False)
     tipo_evento = Column(Text, nullable=False)
     url_video = Column(Text, nullable=False)
     id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)
 
+class ConfiguracionesRoseta(db.Model):
+    __tablename__ = 'configuraciones_roseta'
+    id_configuracion = Column(BigInteger, primary_key=True)
+    id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)
+    wifi_ssid = Column(Text, nullable=False)
+    wifi_password = Column(Text, nullable=False)
+    umbral_humo = Column(Integer, nullable=False)
+    umbral_movimiento = Column(Integer, nullable=False)

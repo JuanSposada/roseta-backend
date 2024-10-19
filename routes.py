@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify, request
-from models import Usuario, Roseta, Dispositivo, HistorialSensores, HistorialCamaras
-from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema, HistorialSensoresSchema, HistorialCamarasSchema
+from models import Usuario, Roseta, Dispositivo, HistorialSensores, HistorialCamaras,ConfiguracionesRoseta
+from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema, HistorialSensoresSchema, HistorialCamarasSchema, ConfiguracionesRosetaSchema
 from models import db
 
 #Blueprint de Usuarios
@@ -64,4 +64,12 @@ def historial_camaras():
     historial_camaras_list = HistorialCamaras.query.all()
     historial_camaras_schema = HistorialCamarasSchema(many=True)
     result = historial_camaras_schema.dump(historial_camaras_list)
+    return jsonify(result)
+
+configuracion_rosetas_bp = Blueprint('configuraciones_roseta',__name__)
+@configuracion_rosetas_bp.route('/configuraciones-roseta', methods=['GET'])
+def configuracion():
+    configuracion_list = ConfiguracionesRoseta.query.all()
+    configuracion_schema = ConfiguracionesRosetaSchema(many=True)
+    result = configuracion_schema.dump(configuracion_list)
     return jsonify(result)
