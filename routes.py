@@ -1,6 +1,6 @@
 from flask import Blueprint,jsonify, request
-from models import Usuario, Roseta, Dispositivo, HistorialSensores, HistorialCamaras,ConfiguracionesRoseta
-from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema, HistorialSensoresSchema, HistorialCamarasSchema, ConfiguracionesRosetaSchema
+from models import Usuario, Roseta, Dispositivo, HistorialSensores, HistorialCamaras,ConfiguracionesRoseta, Alertas
+from schemas import UsuarioSchema, RosetaSchema, DispositivoSchema, HistorialSensoresSchema, HistorialCamarasSchema, ConfiguracionesRosetaSchema, AlertasSchema
 from models import db
 
 #Blueprint de Usuarios
@@ -72,4 +72,12 @@ def configuracion():
     configuracion_list = ConfiguracionesRoseta.query.all()
     configuracion_schema = ConfiguracionesRosetaSchema(many=True)
     result = configuracion_schema.dump(configuracion_list)
+    return jsonify(result)
+
+alertas_bp = Blueprint('alertas', __name__)
+@alertas_bp.route('/alertas', methods=['GET','POST'])
+def alertas():
+    alertas_list = Alertas.query.all()
+    alertas_schema = AlertasSchema(many=True)
+    result = alertas_schema.dump(alertas_list)
     return jsonify(result)

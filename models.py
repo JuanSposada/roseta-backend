@@ -52,3 +52,11 @@ class ConfiguracionesRoseta(db.Model):
     wifi_password = Column(Text, nullable=False)
     umbral_humo = Column(Integer, nullable=False)
     umbral_movimiento = Column(Integer, nullable=False)
+ 
+class Alertas(db.Model):
+    __tablename__ = 'alertas'
+    id_alerta = Column(BigInteger, primary_key=True)
+    tipo_alerta = Column(Text, nullable=False)
+    mensaje = Column(Text, nullable=False)
+    fecha_hora = Column(TIMESTAMP, nullable=False)
+    id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)
