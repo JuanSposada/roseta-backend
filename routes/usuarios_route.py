@@ -6,7 +6,7 @@ from models import db
 
 #Blueprint de Usuarios
 usuarios_bp = Blueprint('usuarios', __name__)
-@usuarios_bp.route('/usuarios', methods=['GET','POST'])
+@usuarios_bp.route('/usuarios', methods=['GET','POST','PUT', 'DELETE'])
 def usuarios():
     if request.method == 'GET':
         usuarios_list = Usuario.query.all()
