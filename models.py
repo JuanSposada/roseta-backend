@@ -11,7 +11,7 @@ class Usuario(db.Model):
     nombre = Column(Text, nullable=False)
     correo = Column(Text, unique=True, nullable=False)
     password = Column(Text, nullable=False )
-    telefono = Column(Text, nullable=True)
+    telefono = Column(Text, nullable=False)
     rol = Column(Text, nullable=True)
 
 class Roseta(db.Model):

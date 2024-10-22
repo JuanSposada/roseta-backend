@@ -15,4 +15,18 @@ def usuarios():
         return jsonify(result)
     
     if request.method == 'POST':
+        if request.is_json:
+            nombre = request.json['nombre']
+            correo = request.json['correo']
+            password = request.json['password']
+            telefono = request.json['telefono']
+            rol = request.json['rol']
+            usuario = Usuario(nombre=nombre, correo=correo, password=password,telefono=telefono, rol=rol)
+            db.session.add(usuario)
+            db.session.commit()
+            usuario_schema = UsuarioSchema()
+            result = usuario_schema.dump(usuario)
+            return jsonify(result)
+
         return jsonify(message='metodo post')
+    
