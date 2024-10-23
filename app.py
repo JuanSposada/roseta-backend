@@ -18,9 +18,6 @@ ma.init_app(app)
 register_blueprints(app)
 
 
-# Rutas
-
-
 if __name__ == '__main__':
     app.run(debug=True)
 
