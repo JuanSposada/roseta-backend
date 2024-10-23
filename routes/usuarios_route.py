@@ -26,7 +26,6 @@ def usuarios():
             db.session.commit()
             usuario_schema = UsuarioSchema()
             result = usuario_schema.dump(usuario)
-            return jsonify(result)
-
-        return jsonify(message='metodo post')
+            return jsonify(result),201
+        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
     

@@ -23,4 +23,5 @@ def historial_sensores():
             db.session.commit()
             hist_sensor_schema = HistorialSensoresSchema()
             result = hist_sensor_schema.dump(hist_sensor)
-            return jsonify(result)
+            return jsonify(result),201
+        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400

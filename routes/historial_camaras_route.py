@@ -24,7 +24,7 @@ def historial_camaras():
                 db.session.commit()
                 hist_camara_schema = HistorialCamarasSchema()
                 result = hist_camara_schema.dump(hist_camara)
-                return jsonify(result)
+                return jsonify(result),201
             except KeyError:
                 return jsonify(message='formato, valores o tipo de dato incorrectos, solo se reciben JSON'),404
         return jsonify(message="Solo se aceptan POST en formato JSON valido"),400

@@ -22,4 +22,5 @@ def dispositivos():
             db.session.commit()
             dispositivo_schema = DispositivoSchema()
             result = dispositivo_schema.dump(dispositivo)
-            return jsonify(result)
+            return jsonify(result),201
+        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400

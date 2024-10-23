@@ -25,4 +25,5 @@ def configuracion():
             db.session.commit()
             configuracion_schema = ConfiguracionesRosetaSchema()
             result = configuracion_schema.dump(configuraciones)
-            return jsonify(result)
+            return jsonify(result),201
+        return jsonify(message='Solo se aceptan JSON validos'),400

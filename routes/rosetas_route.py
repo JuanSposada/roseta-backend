@@ -22,4 +22,5 @@ def rosetas():
                 db.session.commit()
                 roseta_schema = RosetaSchema()
                 result = roseta_schema.dump(roseta)
-                return jsonify(result)
+                return jsonify(result),201
+        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
