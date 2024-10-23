@@ -6,9 +6,23 @@ from models import db
 
 # Configuraciones Blueprint
 configuracion_rosetas_bp = Blueprint('configuraciones_roseta',__name__)
-@configuracion_rosetas_bp.route('/configuraciones-roseta', methods=['GET'])
+@configuracion_rosetas_bp.route('/configuraciones-roseta', methods=['GET','POST'])
 def configuracion():
-    configuracion_list = ConfiguracionesRoseta.query.all()
-    configuracion_schema = ConfiguracionesRosetaSchema(many=True)
-    result = configuracion_schema.dump(configuracion_list)
-    return jsonify(result)
+    if request.method =='GET':
+        configuraciones_list = ConfiguracionesRoseta.query.all()
+        configuraciones_schema = ConfiguracionesRosetaSchema(many=True)
+        result = configuraciones_schema.dump(configuraciones_list)
+        return jsonify(result)
+    if request.method == 'POST':
+        if request.is_json:
+            id_roseta = request.json['id_roseta']
+            wifi_ssid = request.json['wifi_ssid']
+            wifi_password = request.json['wifi_password']
+            umbral_humo = request.json['umbral_humo']
+            umbral_movimiento = request.json['umbral_movimiento']
+            configuraciones = ConfiguracionesRoseta(id_roseta=id_roseta,wifi_ssid=wifi_ssid, wifi_password=wifi_password, umbral_humo=umbral_humo, umbral_movimiento=umbral_movimiento)
+            db.session.add(configuraciones)
+            db.session.commit()
+            configuracion_schema = ConfiguracionesRosetaSchema()
+            result = configuracion_schema.dump(configuraciones)
+            return jsonify(result)

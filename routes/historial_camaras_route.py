@@ -27,3 +27,4 @@ def historial_camaras():
                 return jsonify(result)
             except KeyError:
                 return jsonify(message='formato, valores o tipo de dato incorrectos, solo se reciben JSON'),404
+        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
