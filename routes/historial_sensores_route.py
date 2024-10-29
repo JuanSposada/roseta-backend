@@ -1,7 +1,8 @@
-from flask import Blueprint,jsonify, request
+from flask import jsonify, request
 from models import HistorialSensores
 from schemas import HistorialSensoresSchema
 from models import db
+from flask_smorest import Blueprint
 
 # Historial Sensores
 historial_sensores_bp = Blueprint('historial_sensores',__name__)

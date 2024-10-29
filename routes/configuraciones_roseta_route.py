@@ -1,8 +1,8 @@
-from flask import Blueprint
-from flask import Blueprint,jsonify, request
+from flask import jsonify, request
 from models import ConfiguracionesRoseta
 from schemas import ConfiguracionesRosetaSchema
 from models import db
+from flask_smorest import Blueprint
 
 # Configuraciones Blueprint
 configuracion_rosetas_bp = Blueprint('configuraciones_roseta',__name__)

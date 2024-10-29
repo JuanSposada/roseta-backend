@@ -1,7 +1,8 @@
-from flask import Blueprint, jsonify, request
+from flask import jsonify, request
 from models import HistorialCamaras
 from schemas import HistorialCamarasSchema
 from models import db
+from flask_smorest import Blueprint
 
 # Blueprint historial_camaras
 historial_camaras_bp = Blueprint('historial_camaras',__name__)

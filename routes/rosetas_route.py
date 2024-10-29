@@ -1,7 +1,8 @@
-from flask import Blueprint,jsonify, request
+from flask import jsonify, request
 from models import Roseta
 from schemas import RosetaSchema
 from models import db
+from flask_smorest import Blueprint
 
 #Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)

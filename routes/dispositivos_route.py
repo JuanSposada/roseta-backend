@@ -1,7 +1,8 @@
-from flask import Blueprint,jsonify, request
+from flask import jsonify, request
 from models import  Dispositivo
 from schemas import DispositivoSchema
 from models import db
+from flask_smorest import Blueprint
 
  # Dispositivos   
 dispositivos_bp = Blueprint('dispositivos', __name__)

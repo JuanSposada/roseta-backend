@@ -8,12 +8,11 @@ from .alertas_route import alertas_bp
 
 
 # Registrar blueprints
-def register_blueprints(app):
-    app.register_blueprint(usuarios_bp, url_prefix='/api')
-    app.register_blueprint(rosetas_bp, url_prefix='/api')
-    app.register_blueprint(dispositivos_bp, url_prefix='/api')
-    app.register_blueprint(historial_sensores_bp, url_prefix='/api')
-    app.register_blueprint(historial_camaras_bp, url_prefix='/api')
-    app.register_blueprint(configuracion_rosetas_bp, url_prefix='/api')
-    app.register_blueprint(alertas_bp, url_prefix='/api')
+def register_blueprints(api):
+    api.register_blueprint(rosetas_bp, url_prefix='/api')
+    api.register_blueprint(dispositivos_bp, url_prefix='/api')
+    api.register_blueprint(historial_sensores_bp, url_prefix='/api')
+    api.register_blueprint(historial_camaras_bp, url_prefix='/api')
+    api.register_blueprint(configuracion_rosetas_bp, url_prefix='/api')
+    api.register_blueprint(alertas_bp, url_prefix='/api')
     
