@@ -34,11 +34,28 @@ class Usuarios(MethodView):
             except:
                 return jsonify(message='verifica datos correo debe ser unico'),400
         return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
-
-@usuarios_bp.route('/usuarios/<string:id_usuario>')
-class UsuarioSelect(MethodView):
-    def put(self, id_usuario):
-        return jsonify(message='put' + id_usuario)
     
-    def delete(self, id_usuario):
-        return jsonify(message='delete' + id_usuario)
+    def put(self):
+        if request.is_json:
+            id_usuario = request.json['id_usuario']
+            usuario = Usuario.query.filter_by(id_usuario=id_usuario).first()
+            if usuario:
+                usuario.nombre = request.json['nombre']
+                usuario.correo = request.json['correo']
+                usuario.rol = request.json['rol']
+                usuario.password = request.json['password']
+                usuario.telefono = request.json['telefono']
+                db.session.commit()
+                return jsonify(message='updated')
+
+@usuarios_bp.route('/usuarios/<int:id_usuario>')
+class UsuarioSelect(MethodView):
+    
+    def delete(self, id_usuario:int):
+        usuario = Usuario.query.filter_by(id_usuario=id_usuario).first()
+        if usuario:
+            db.session.delete(usuario)
+            db.session.commit()
+            return jsonify(message='delete' + str(id_usuario))
+        # se encontro error al quere borrar usuario porque esta referenciado a otra tabla
+        #inbestigar como
