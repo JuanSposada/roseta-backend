@@ -3,17 +3,20 @@ from models import Roseta
 from schemas import RosetaSchema
 from models import db
 from flask_smorest import Blueprint
+from flask.views import MethodView
 
 #Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)
-@rosetas_bp.route('/rosetas', methods=['GET', 'POST'])
-def rosetas():
-    if request.method == 'GET':
+@rosetas_bp.route('/rosetas')
+class Rosetas(MethodView):
+    
+    def get(self):
         rosetas_list = Roseta.query.all()
         rosetas_schema = RosetaSchema(many=True)
         result = rosetas_schema.dump(rosetas_list)
         return jsonify(result)
-    if request.method == 'POST':
+    
+    def post(self):
         if request.is_json:
                 ubicacion = request.json['ubicacion']
                 estado = request.json['estado']
@@ -25,3 +28,15 @@ def rosetas():
                 result = roseta_schema.dump(roseta)
                 return jsonify(result),201
         return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
+    
+@rosetas_bp.route('/rosetas/<string:id_roseta>')
+class RosetaModify(MethodView):
+    def put(self, id_roseta):
+        return jsonify(message='put' + id_roseta)
+    
+    def delete(self, id_roseta):
+        return jsonify(message='delete' + id_roseta)
+    
+
+        
+     
