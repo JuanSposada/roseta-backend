@@ -13,7 +13,7 @@ marshmallow==3.22.0
 marshmallow-sqlalchemy==1.1.0
 packaging==24.1
 psycopg2-binary==2.9.9
-SQLAlchemy==2.0.35
+SQLAlchemy==2.0.36
 typing_extensions==4.12.2
 webargs==8.6.0
 Werkzeug==3.0.4
