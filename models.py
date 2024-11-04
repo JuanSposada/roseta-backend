@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey,TIMESTAMP, Integer
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
@@ -60,3 +61,10 @@ class Alertas(db.Model):
     mensaje = Column(Text, nullable=False)
     fecha_hora = Column(TIMESTAMP, nullable=False)
     id_roseta = Column(BigInteger, ForeignKey('rosetas.id_roseta'), nullable=False)
+
+class Logs(db.Model):
+    __tablename__ = 'logs'
+    id_log = Column(BigInteger, primary_key=True)
+    id_usuario = Column(BigInteger, ForeignKey('usuarios.id_usuario'), nullable=False)
+    fecha_hora = Column(TIMESTAMP, server_default=func.now())
+    accion = Column(Text)
