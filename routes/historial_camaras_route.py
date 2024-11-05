@@ -2,18 +2,20 @@ from flask import jsonify, request
 from models import HistorialCamaras
 from schemas import HistorialCamarasSchema
 from models import db
+from flask.views import MethodView
 from flask_smorest import Blueprint
 
 # Blueprint historial_camaras
-historial_camaras_bp = Blueprint('historial_camaras',__name__)
-@historial_camaras_bp.route('/historial-camaras', methods=['GET','POST'])
-def historial_camaras():
-    if request.method == 'GET':
+historial_camaras_bp = Blueprint('historial_camaras',__name__, description='historial de eventos de camara')
+@historial_camaras_bp.route('/historial-camaras')
+class HistCam(MethodView):
+    def get(self):
         historial_camaras_list = HistorialCamaras.query.all()
         historial_camaras_schema = HistorialCamarasSchema(many=True)
         result = historial_camaras_schema.dump(historial_camaras_list)
         return jsonify(result)
-    if request.method == 'POST':
+
+    def post(self):
         if request.is_json:
             try:
                 fecha_hora = request.json['fecha_hora']

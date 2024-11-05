@@ -29,13 +29,22 @@ class Rosetas(MethodView):
                 return jsonify(result),201
         return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
     
-@rosetas_bp.route('/rosetas/<string:id_roseta>')
-class RosetaModify(MethodView):
-    def put(self, id_roseta):
-        return jsonify(message='put' + id_roseta)
+    def put(self):
+        if request.json:
+            id_roseta = request.json['id_roseta']
+            roseta = Roseta.query.filter_by(id_roseta=id_roseta).first()
+            if roseta:
+                roseta.ubicacion = request.json['ubicacion']
+                roseta.estado = request.json['estado']
+                roseta.id_usuario = request.json['id_usuario']
+                db.session.commit()
+                return jsonify(message='updated')
     
     def delete(self, id_roseta):
         return jsonify(message='delete' + id_roseta)
+    
+#@rosetas_bp.route('/rosetas/<string:id_roseta>')
+#class RosetaModify(MethodView):
     
 
         

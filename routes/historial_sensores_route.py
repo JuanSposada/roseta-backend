@@ -2,18 +2,20 @@ from flask import jsonify, request
 from models import HistorialSensores
 from schemas import HistorialSensoresSchema
 from models import db
+from flask.views import MethodView
 from flask_smorest import Blueprint
 
 # Historial Sensores
-historial_sensores_bp = Blueprint('historial_sensores',__name__)
-@historial_sensores_bp.route('/historial-sensores', methods=['GET','POST'])
-def historial_sensores():
-    if request.method =='GET':
+historial_sensores_bp = Blueprint('historial_sensores',__name__, description='Historial de eventos de sensores')
+@historial_sensores_bp.route('/historial-sensores')
+class HistSensor(MethodView):
+    def get(self):
         historial_list = HistorialSensores.query.all()
         historial_schema = HistorialSensoresSchema(many=True)
         result = historial_schema.dump(historial_list)
         return jsonify(result)
-    if request.method == 'POST':
+    
+    def post(self):
         if request.is_json:
             tipo_sensor = request.json['tipo_sensor']
             fecha_hora = request.json['fecha_hora']
