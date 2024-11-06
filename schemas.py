@@ -1,6 +1,7 @@
 from flask_marshmallow import Marshmallow
-from models import Usuario, Roseta, Dispositivo,HistorialSensores, HistorialCamaras, ConfiguracionesRoseta, Alertas, Logs
+from models import Usuario, Roseta, Dispositivo,HistorialSensores, HistorialCamaras, ConfiguracionesRoseta, Alertas, Logs, db
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+
 
 ma = Marshmallow()
 
@@ -9,6 +10,7 @@ class UsuarioSchema(SQLAlchemyAutoSchema):
         model = Usuario
         load_instance = True
         include_fk = True
+        sqla_session = db.session
 
 
 class RosetaSchema(SQLAlchemyAutoSchema):
@@ -16,6 +18,7 @@ class RosetaSchema(SQLAlchemyAutoSchema):
         model = Roseta
         load_instance = True
         include_fk = True
+        sqla_session = db.session
 
 class DispositivoSchema(SQLAlchemyAutoSchema):
     class Meta:

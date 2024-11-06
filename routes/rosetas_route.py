@@ -2,8 +2,9 @@ from flask import jsonify, request
 from models import Roseta
 from schemas import RosetaSchema
 from models import db
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
 from flask.views import MethodView
+from sqlalchemy.exc import SQLAlchemyError
 
 #Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)
@@ -43,9 +44,14 @@ class Rosetas(MethodView):
     def delete(self, id_roseta):
         return jsonify(message='delete' + id_roseta)
     
-#@rosetas_bp.route('/rosetas/<string:id_roseta>')
-#class RosetaModify(MethodView):
-    
-
-        
-     
+@rosetas_bp.route('/rosetas/registrar')
+class RosetasRegistrar(MethodView):   
+    @rosetas_bp.arguments(RosetaSchema)
+    @rosetas_bp.response(201,RosetaSchema)
+    def post(self, roseta):
+        try:
+            db.session.add(roseta)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message='Error al registrar usuario')
+        return roseta

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,redirect
 from models import db
 from schemas import ma
 from routes import  register_blueprints
@@ -54,7 +54,7 @@ register_blueprints(api)
 
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return redirect('/swagger-ui')
 
 if __name__ == '__main__':
     app.run(debug=True)

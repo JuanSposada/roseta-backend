@@ -2,8 +2,8 @@ from flask import jsonify, request
 from flask.views import MethodView
 from models import Usuario
 from schemas import UsuarioSchema
-from flask_smorest import Blueprint
-
+from flask_smorest import Blueprint, abort
+from sqlalchemy.exc import SQLAlchemyError
 from models import db
 
 
@@ -48,14 +48,14 @@ class Usuarios(MethodView):
                 db.session.commit()
                 return jsonify(message='updated')
 
-@usuarios_bp.route('/usuarios/<int:id_usuario>')
+@usuarios_bp.route('/usuarios/registrar')
 class UsuarioSelect(MethodView):
-    
-    def delete(self, id_usuario:int):
-        usuario = Usuario.query.filter_by(id_usuario=id_usuario).first()
-        if usuario:
-            db.session.delete(usuario)
+    @usuarios_bp.arguments(UsuarioSchema)
+    @usuarios_bp.response(201, UsuarioSchema)
+    def post(self, usuario):
+        try:
+            db.session.add(usuario)
             db.session.commit()
-            return jsonify(message='delete' + str(id_usuario))
-        # se encontro error al quere borrar usuario porque esta referenciado a otra tabla
-        #inbestigar como
+        except SQLAlchemyError:
+            abort(500, message='Error al registrar usuario')
+        return usuario
