@@ -141,9 +141,13 @@ class UsuarioDelete(MethodView):
         """
         usuario = Usuario.query.get_or_404(id_usuario)
 
-        try:
-            db.session.delete(usuario)
-            db.session.commit()
-        except SQLAlchemyError:
-            abort(400, message='Error al borrar usuario')
+        db.session.delete(usuario)
+        db.session.commit()
         return usuario
+
+#        try:
+#            db.session.delete(usuario)
+#            db.session.commit()
+#        except SQLAlchemyError:
+#            abort(400, message='Error al borrar usuario')
+#        return usuario
