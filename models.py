@@ -15,7 +15,7 @@ class Usuario(db.Model):
     rol = Column(Text)
 
     #Relaciones DB
-    logs = db.relationship('Logs', back_populates='usuario', )
+    logs = db.relationship('Logs', back_populates='usuario', lazy='dynamic', cascade='all, delete, delete-orphan' )
     rosetas = db.relationship("Roseta", back_populates="usuario", lazy='dynamic', cascade='all, delete, delete-orphan')
 
 class Roseta(db.Model):
