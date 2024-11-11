@@ -16,7 +16,7 @@ class Usuario(db.Model):
 
     #Relaciones DB
     logs = db.relationship('Logs', back_populates='usuario')
-    rosetas = db.relationship("Roseta", back_populates="usuario")
+    rosetas = db.relationship("Roseta", back_populates="usuario", lazy='dynamic', cascade='all, delete, delete-orphan')
 
 class Roseta(db.Model):
     __tablename__= 'rosetas'
