@@ -26,7 +26,7 @@ class Roseta(db.Model):
     id_usuario = Column(BigInteger, ForeignKey('usuarios.id_usuario'), nullable=False)
     
     #Relaciones con la DB
-    usuario = db.relationship("Usuario", back_populates='rosetas', cascade="all, delete, delete-orphan")
+    usuario = db.relationship("Usuario", back_populates='rosetas')
     dispositivos = db.relationship('Dispositivo', back_populates='roseta', cascade="all, delete, delete-orphan")
     historial_sensores = db.relationship('HistorialSensores', back_populates='roseta', cascade="all, delete, delete-orphan")
     historial_camaras = db.relationship('HistorialCamaras', back_populates='roseta', cascade="all, delete, delete-orphan")
