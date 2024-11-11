@@ -1,52 +1,70 @@
-from flask import jsonify, request
 from models import Roseta
-from schemas import RosetaSchema
+from schemas import RosetaSchema, RosetaPostSchema
 from models import db
 from flask_smorest import Blueprint, abort
 from flask.views import MethodView
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
 #Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)
 @rosetas_bp.route('/rosetas')
 class Rosetas(MethodView):
-    
+    @rosetas_bp.response(200, RosetaSchema(many=True))
     def get(self):
-        rosetas_list = Roseta.query.all()
-        rosetas_schema = RosetaSchema(many=True)
-        result = rosetas_schema.dump(rosetas_list)
-        return jsonify(result)
+        """Obtiene todos las Rosetas registradas en ka Base de Datos"""
+        rosetas = Roseta.query.all()
+        return rosetas
+
+@rosetas_bp.route('/rosetas/<string:id_roseta>')
+class Rosetas(MethodView):
+    @rosetas_bp.response(200, RosetaSchema)
+    def get(self, id_roseta):
+        """Obtiene Solo la Roseta especificada en el parametro si esta existe"""
+        roseta = Roseta.query.get_or_404(id_roseta)
+        return roseta
+
+@rosetas_bp.route('/rosetas/update')
+class UsuarioUpdate(MethodView):
+    @rosetas_bp.arguments(RosetaSchema)
+    @rosetas_bp.response(200, RosetaSchema)
+    def put(self,roseta_data):
+        """
+        Actualiza los datos de una roseta existente. Se puede actualizar la ubicación y el usuario asignado.
+        Si el id_usuario proporcionado no existe, se genera un error.
+    """
+        id_roseta = roseta_data.id_roseta
+        if not id_roseta:
+            abort(400, message='Se requiere "id_roseta" para poder actualizar')
+
+        roseta = Roseta.query.get(id_roseta)
+        if not roseta:
+            abort(404, message='id de roseta no encontrado') 
+        
+        for key, value in roseta_data.__dict__.items():
+            if key != 'id_roseta' and hasattr(roseta,key):
+                setattr(roseta,key,value)
+
+        try:
+            db.session.commit()
+
+        except IntegrityError as e:
+            db.session.rollback()
+        
+
+            if 'id_usuario' in str(e):
+                abort(400, message="El usuario con el id especificado no existe")
+            raise e
     
-    def post(self):
-        if request.is_json:
-                ubicacion = request.json['ubicacion']
-                estado = request.json['estado']
-                id_usuario = request.json['id_usuario']
-                roseta = Roseta(ubicacion=ubicacion, estado=estado, id_usuario=id_usuario)
-                db.session.add(roseta)
-                db.session.commit()
-                roseta_schema = RosetaSchema()
-                result = roseta_schema.dump(roseta)
-                return jsonify(result),201
-        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
-    
-    def put(self):
-        if request.json:
-            id_roseta = request.json['id_roseta']
-            roseta = Roseta.query.filter_by(id_roseta=id_roseta).first()
-            if roseta:
-                roseta.ubicacion = request.json['ubicacion']
-                roseta.estado = request.json['estado']
-                roseta.id_usuario = request.json['id_usuario']
-                db.session.commit()
-                return jsonify(message='updated')
-    
-    def delete(self, id_roseta):
-        return jsonify(message='delete' + id_roseta)
-    
+        except SQLAlchemyError:
+            db.session.rollback()
+            abort(500, message="Error al actualizar el roseta")
+
+        return roseta
+
+
 @rosetas_bp.route('/rosetas/registrar')
 class RosetasRegistrar(MethodView):   
-    @rosetas_bp.arguments(RosetaSchema)
+    @rosetas_bp.arguments(RosetaPostSchema)
     @rosetas_bp.response(201,RosetaSchema)
     def post(self, roseta):
         try:
@@ -54,4 +72,17 @@ class RosetasRegistrar(MethodView):
             db.session.commit()
         except SQLAlchemyError:
             abort(500, message='Error al registrar usuario')
+        return roseta 
+
+@rosetas_bp.route('/rosetas/borrar/<string:id_roseta>')
+class RosetaDelete(MethodView):
+    @rosetas_bp.response(200,RosetaSchema)
+    def delete(self, id_roseta):
+        roseta = Roseta.query.get_or_404(id_roseta)
+        try:
+            db.session.delete(roseta)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(400, message='Error al borrar roseta')
         return roseta
+     
