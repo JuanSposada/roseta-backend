@@ -15,7 +15,7 @@ class Usuario(db.Model):
     rol = Column(Text)
 
     #Relaciones DB
-    logs = db.relationship('Logs', back_populates='usuario')
+    logs = db.relationship('Logs', back_populates='usuario', )
     rosetas = db.relationship("Roseta", back_populates="usuario", lazy='dynamic', cascade='all, delete, delete-orphan')
 
 class Roseta(db.Model):
@@ -26,12 +26,12 @@ class Roseta(db.Model):
     id_usuario = Column(BigInteger, ForeignKey('usuarios.id_usuario'), nullable=False)
     
     #Relaciones con la DB
-    usuario = db.relationship("Usuario", back_populates='rosetas')
-    dispositivos = db.relationship('Dispositivo', back_populates='roseta')
-    historial_sensores = db.relationship('HistorialSensores', back_populates='roseta')
-    historial_camaras = db.relationship('HistorialCamaras', back_populates='roseta')
-    configuraciones = db.relationship('ConfiguracionesRoseta', back_populates='roseta')
-    alertas = db.relationship('Alertas', back_populates='roseta')
+    usuario = db.relationship("Usuario", back_populates='rosetas', cascade="all, delete, delete-orphan")
+    dispositivos = db.relationship('Dispositivo', back_populates='roseta', cascade="all, delete, delete-orphan")
+    historial_sensores = db.relationship('HistorialSensores', back_populates='roseta', cascade="all, delete, delete-orphan")
+    historial_camaras = db.relationship('HistorialCamaras', back_populates='roseta', cascade="all, delete, delete-orphan")
+    configuraciones = db.relationship('ConfiguracionesRoseta', back_populates='roseta', cascade="all, delete, delete-orphan")
+    alertas = db.relationship('Alertas', back_populates='roseta', cascade="all, delete, delete-orphan")
     
     
 
