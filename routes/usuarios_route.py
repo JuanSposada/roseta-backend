@@ -4,6 +4,7 @@ from schemas import UsuarioSchema, UsuariosPostSchema
 from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from models import db
+from passlib.hash import pbkdf2_sha256
 
 # Blueprint de Usuarios
 usuarios_bp = Blueprint('usuarios', __name__, description='Operaciones con Usuarios')
@@ -62,6 +63,8 @@ class UsuarioRegister(MethodView):
         Si ocurre un error al guardar el usuario en la base de datos.
         """
         try:
+            hashed_password = pbkdf2_sha256.hash(usuario.password)
+            usuario.password = hashed_password 
             db.session.add(usuario)
             db.session.commit()
         except SQLAlchemyError:
@@ -141,13 +144,11 @@ class UsuarioDelete(MethodView):
         """
         usuario = Usuario.query.get_or_404(id_usuario)
 
-        db.session.delete(usuario)
-        db.session.commit()
-        return usuario
 
-#        try:
-#            db.session.delete(usuario)
-#            db.session.commit()
-#        except SQLAlchemyError:
-#            abort(400, message='Error al borrar usuario')
-#        return usuario
+        try:
+            db.session.delete(usuario)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(400, message='Error al borrar usuario')
+        return usuario
+    

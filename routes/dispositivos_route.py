@@ -1,32 +1,44 @@
 from flask import jsonify, request
 from models import  Dispositivo
-from schemas import DispositivoSchema
+from schemas import DispositivoSchema, DispositivoPostSchema
 from models import db
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
 from flask.views import MethodView
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 
  # Dispositivos   
 dispositivos_bp = Blueprint('dispositivos', __name__, 'Operaciones con Dispositivos')
-@dispositivos_bp.route('/dispositivos')
+@dispositivos_bp.route('/dispositivos/get')
 class Dispositivos(MethodView):
+    @dispositivos_bp.response(200, DispositivoSchema)
     def get(self):
-        dispositivos_list = Dispositivo.query.all()
-        dispositivos_schema = DispositivoSchema(many=True)
-        result = dispositivos_schema.dump(dispositivos_list)
-        return jsonify(result)
+        """
+        Obtiene la lista de todos los dispositivos registrados.
+
+        **Respuesta exitosa (200):**
+        Devuelve un listado con los detalles de todos los dispositivos.
+        """
+        dispositivos = Dispositivo.query.all()
+        return dispositivos
+
+@dispositivos_bp.route('/dispositivos/get/<string:id_dispositivo>')
+class DispositivoSelect(MethodView):
+    @dispositivos_bp.response(200, DispositivoSchema)    
+    def get(self, id_dispositivo):
+        dispositivo = Dispositivo.query.get_or_404(id_dispositivo)
+        return dispositivo
     
-    def post(self):
-        if request.is_json:
-            tipo_dispositivo = request.json['tipo_dispositivo']
-            estado_dispositivo = request.json['estado_dispositivo']
-            id_roseta = request.json['id_roseta']
-            dispositivo = Dispositivo(tipo_dispositivo=tipo_dispositivo, estado_dispositivo=estado_dispositivo, id_roseta=id_roseta)
+@dispositivos_bp.route('/dispositivos/registrar')
+class DispositivoRegistrar(MethodView):
+    @dispositivos_bp.arguments(DispositivoPostSchema)
+    @dispositivos_bp.response(201, DispositivoSchema)
+    def post(self, dispositivo):
+        try:
             db.session.add(dispositivo)
             db.session.commit()
-            dispositivo_schema = DispositivoSchema()
-            result = dispositivo_schema.dump(dispositivo)
-            return jsonify(result),201
-        return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
+        except SQLAlchemyError: 
+            abort(500, message='Error al registrar dispositivo ')   
+        return dispositivo    
     
     def put(self):
         if request.is_json:

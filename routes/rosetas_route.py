@@ -12,7 +12,10 @@ rosetas_bp = Blueprint('rosetas', __name__)
 class Rosetas(MethodView):
     @rosetas_bp.response(200, RosetaSchema(many=True))
     def get(self):
-        """Obtiene todos las Rosetas registradas en la Base de Datos"""
+        """Obtiene todas las Rosetas registradas en la Base de Datos
+        ---
+        Devuelve una lista de todas las Rosetas disponibles.
+        """
         rosetas = Roseta.query.all()
         return rosetas
 
@@ -20,7 +23,14 @@ class Rosetas(MethodView):
 class RosetaSelect(MethodView):
     @rosetas_bp.response(200, RosetaSchema)
     def get(self, id_roseta):
-        """Obtiene solo la Roseta especificada en el parámetro si esta existe"""
+        """Obtiene una Roseta específica
+        ---
+        Parámetros:
+          - id_roseta (string): ID de la roseta que se desea consultar.
+        
+        Devuelve la Roseta especificada en el parámetro si esta existe. 
+        En caso contrario, retorna un error 404.
+        """
         roseta = Roseta.query.get_or_404(id_roseta)
         return roseta
 
@@ -29,9 +39,13 @@ class RosetaUpdate(MethodView):
     @rosetas_bp.arguments(RosetaSchema)
     @rosetas_bp.response(200, RosetaSchema)
     def put(self, roseta_data):
-        """
-        Actualiza los datos de una roseta existente. Se puede actualizar la ubicación y el usuario asignado.
-        Si el id_usuario proporcionado no existe, se genera un error.
+        """Actualiza una Roseta existente
+        ---
+        Parámetros:
+          - id_roseta (string): ID de la roseta a actualizar. Este debe existir en la base de datos.
+          - otros campos de Roseta para actualizar (ubicación, id_usuario, etc.)
+
+        Actualiza los datos de una Roseta. Si el `id_roseta` o `id_usuario` proporcionados no existen, se genera un error.
         """
         id_roseta = roseta_data.id_roseta
         if not id_roseta:
@@ -65,8 +79,12 @@ class RosetaRegistrar(MethodView):
     @rosetas_bp.arguments(RosetaPostSchema)
     @rosetas_bp.response(201, RosetaSchema)
     def post(self, roseta):
-        """
-        Registra una nueva roseta en la base de datos. Si ocurre un error, se devuelve un mensaje indicando el fallo.
+        """Registra una nueva Roseta
+        ---
+        Registra una nueva Roseta en la base de datos. Si ocurre un error, se devuelve un mensaje indicando el fallo.
+        
+        Parámetros:
+          - Datos de la Roseta (ubicación, id_usuario, etc.)
         """
         try:
             db.session.add(roseta)
@@ -79,9 +97,12 @@ class RosetaRegistrar(MethodView):
 class RosetaDelete(MethodView):
     @rosetas_bp.response(200, RosetaSchema)
     def delete(self, id_roseta):
-        """
+        """Elimina una Roseta existente
+        ---
+        Parámetros:
+          - id_roseta (string): ID de la roseta que se desea eliminar.
+        
         Elimina una roseta de la base de datos. Si la roseta no existe, se devuelve un error 404.
-        Si ocurre un error al eliminarla, se devuelve un error 400.
         """
         roseta = Roseta.query.get_or_404(id_roseta)
         try:
