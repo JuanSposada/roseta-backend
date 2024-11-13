@@ -1,7 +1,7 @@
 from flask_marshmallow import Marshmallow
 from models import Usuario, Roseta, Dispositivo,HistorialSensores, HistorialCamaras, ConfiguracionesRoseta, Alertas, Logs, db
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow import fields
+from marshmallow import fields, Schema
 
 
 ma = Marshmallow()
@@ -71,3 +71,7 @@ class LogsSchema(SQLAlchemyAutoSchema):
         model = Logs
         load_instance = True
         include_fk = True
+
+class LoginSchema(Schema):
+    correo = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)

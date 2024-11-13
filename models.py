@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Text, BigInteger, Boolean, ForeignKey,TIMESTAMP, Integer
 from sqlalchemy.sql import func
 
+
 db = SQLAlchemy()
 
 class Usuario(db.Model): 
@@ -88,3 +89,5 @@ class Logs(db.Model):
     fecha_hora = Column(TIMESTAMP, server_default=func.now())
     accion = Column(Text)
     usuario = db.relationship('Usuario', back_populates='logs')
+
+

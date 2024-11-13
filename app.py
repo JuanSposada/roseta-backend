@@ -6,6 +6,7 @@ from flask_smorest import Api
 from routes.usuarios_route import usuarios_bp
 import os 
 from sqlalchemy import text
+from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 
@@ -37,9 +38,9 @@ def test_db_connection():
         return f"Error de conexión: {e}", 500
 
 api = Api(app)
-api.register_blueprint(usuarios_bp, url_prefix='/api')
 
-
+app.config["JWT_SECRET_KEY"] = 'roseta_lumitech'
+jwt = JWTManager(app)
 
 db.init_app(app)
 ma.init_app(app)

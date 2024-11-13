@@ -24,6 +24,17 @@ class RosetaSelect(MethodView):
         roseta = Roseta.query.get_or_404(id_roseta)
         return roseta
 
+@rosetas_bp.route('/rosetas/get/<string:id_usuario>')
+class RosetaUsuario(MethodView):
+    @rosetas_bp.response(200, RosetaSchema(many=True))
+    def get(self, id_usuario):
+        """Obtiene  las Rosetas asociadas a un usuario si esta existe"""
+        rosetas = Roseta.query.filter_by(id_usuario=id_usuario).all()
+        if not rosetas:
+            abort(404, message='no se encontro roseta')
+        return rosetas
+
+
 @rosetas_bp.route('/rosetas/update')
 class RosetaUpdate(MethodView):
     @rosetas_bp.arguments(RosetaSchema)
