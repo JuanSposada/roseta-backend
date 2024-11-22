@@ -10,6 +10,7 @@ from .login_route import login_bp
 
 # Registrar blueprints
 def register_blueprints(api):
+    api.register_blueprint(login_bp, url_prefix='/api')
     api.register_blueprint(usuarios_bp, url_prefix='/api')
     api.register_blueprint(rosetas_bp, url_prefix='/api')
     api.register_blueprint(dispositivos_bp, url_prefix='/api')
@@ -18,4 +19,3 @@ def register_blueprints(api):
     api.register_blueprint(configuracion_rosetas_bp, url_prefix='/api')
     api.register_blueprint(alertas_bp, url_prefix='/api')
     api.register_blueprint(logs_bp, url_prefix='/api')
-    api.register_blueprint(login_bp, url_prefix='/api')

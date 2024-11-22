@@ -91,3 +91,5 @@ class Logs(db.Model):
     usuario = db.relationship('Usuario', back_populates='logs')
 
 
+
+

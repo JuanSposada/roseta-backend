@@ -4,6 +4,7 @@ from models import db
 from flask_smorest import Blueprint, abort
 from flask.views import MethodView
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 # Blueprint de Rosetas
 rosetas_bp = Blueprint('rosetas', __name__)
@@ -73,9 +74,14 @@ class RosetaUpdate(MethodView):
 
 @rosetas_bp.route('/rosetas/registrar')
 class RosetaRegistrar(MethodView):
+    @jwt_required()
     @rosetas_bp.arguments(RosetaPostSchema)
     @rosetas_bp.response(201, RosetaSchema)
     def post(self, roseta):
+        id_usuario = get_jwt_identity()
+        print(id_usuario)
+        roseta.id_usuario = id_usuario
+        print(roseta.id_usuario)
         """
         Registra una nueva roseta en la base de datos. Si ocurre un error, se devuelve un mensaje indicando el fallo.
         """

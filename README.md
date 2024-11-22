@@ -1,9 +1,107 @@
-# Software Requirements Specification (SRS)
+# Proyecto de Backend Roseta Inteligente 
+
 
 **Project Name**: Backend de Roseta para Sistema de Monitoreo  
 **Version**: 1.0  
 **Date**: Octubre 10, 2024  
 
+
+Este es el backend de un proyecto de roseta inteligente desarrollado con Flask. La API está diseñada para gestionar dispositivos, sensores, alertas y más, permitiendo la conexión a una base de datos Postgres para almacenar información.
+
+## Requisitos
+
+Este proyecto está desarrollado en Python y utiliza las siguientes dependencias:
+
+- `apispec==6.7.0`
+- `blinker==1.8.2`
+- `click==8.1.7`
+- `Flask==3.0.3`
+- `Flask-JWT-Extended==4.6.0`
+- `flask-marshmallow==1.2.1`
+- `flask-smorest==0.45.0`
+- `Flask-SQLAlchemy==3.1.1`
+- `greenlet==3.1.1`
+- `itsdangerous==2.2.0`
+- `Jinja2==3.1.4`
+- `MarkupSafe==3.0.1`
+- `marshmallow==3.22.0`
+- `marshmallow-sqlalchemy==1.1.0`
+- `packaging==24.1`
+- `passlib==1.7.4`
+- `psycopg2-binary==2.9.9`
+- `PyJWT==2.9.0`
+- `SQLAlchemy==2.0.36`
+- `typing_extensions==4.12.2`
+- `webargs==8.6.0`
+- `Werkzeug==3.0.4`
+
+## Instalación
+
+1. Clona este repositorio en tu máquina local:
+
+    ```bash
+    git clone <URL_DEL_REPOSITORIO>
+    ```
+
+2. Crea un entorno virtual (opcional pero recomendado):
+
+    ```bash
+    python3 -m venv venv
+    ```
+
+3. Activa el entorno virtual:
+
+    - En Linux/macOS:
+      ```bash
+      source venv/bin/activate
+      ```
+    - En Windows:
+      ```bash
+      venv\Scripts\activate
+      ```
+
+4. Instala las dependencias del proyecto:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## Configuración
+
+Antes de ejecutar el proyecto, asegúrate de configurar las siguientes variables de entorno:
+
+- `POSTGRES_URL`: URL de conexión a la base de datos Postgres (por ejemplo, `postgres://usuario:contraseña@localhost:5432/nombre_db`).
+- `SECRET_KEY`: Clave secreta para la firma de tokens JWT.
+
+## Ejecución
+
+1. Inicia el servidor Flask:
+
+    ```bash
+    flask run
+    ```
+
+    Esto levantará la API en `http://127.0.0.1:5000`.
+
+2. Para probar la conexión a la base de datos, puedes acceder a la ruta `/test-db-connection` en tu navegador o usar una herramienta como Postman.
+
+
+Esta interfaz te permite explorar y probar todos los endpoints de la API.
+
+## Despliegue
+
+El proyecto está desplegado en Vercel. Puedes acceder a la aplicación en la siguiente URL:
+
+[https://flaskrosetalummitech-69tv4fv41-juansposadas-projects.vercel.app/](https://flaskrosetalummitech-69tv4fv41-juansposadas-projects.vercel.app/)
+
+## Estructura del Proyecto
+
+El proyecto sigue una estructura estándar para un backend en Flask
+
+
+
+
+# Software Requirements Specification (SRS)
 
 ## 1. Introducción
 

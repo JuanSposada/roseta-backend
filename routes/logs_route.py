@@ -31,4 +31,4 @@ class Log(MethodView):
             except:
                 return jsonify(message='verifica datos correo debe ser unico'),400
         return jsonify(message="Solo se aceptan POST en formato JSON valido"),400
-    
+        
